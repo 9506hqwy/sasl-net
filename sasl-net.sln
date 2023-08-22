@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sasl", "Sasl\Sasl.csproj", "{217A2B62-6637-4B38-ABAD-A2B2951C2C21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sasl.Test", "Sasl.Test\Sasl.Test.csproj", "{1ACCD0EE-417A-4C51-A81F-04A6EBBE7326}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{217A2B62-6637-4B38-ABAD-A2B2951C2C21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{217A2B62-6637-4B38-ABAD-A2B2951C2C21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{217A2B62-6637-4B38-ABAD-A2B2951C2C21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{217A2B62-6637-4B38-ABAD-A2B2951C2C21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ACCD0EE-417A-4C51-A81F-04A6EBBE7326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ACCD0EE-417A-4C51-A81F-04A6EBBE7326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ACCD0EE-417A-4C51-A81F-04A6EBBE7326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ACCD0EE-417A-4C51-A81F-04A6EBBE7326}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
