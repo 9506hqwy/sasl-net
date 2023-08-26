@@ -1,5 +1,9 @@
 ﻿namespace Sasl.ScramSha256;
 
+using System.Net.Security;
+using System.Runtime.InteropServices;
+using System.Security.Authentication.ExtendedProtection;
+
 public class ClientFirstMessage
 {
     public string? AuthzId { get; set; }
@@ -23,6 +27,47 @@ public class ClientFirstMessage
             Cnonce = Guid.NewGuid().ToString(),
             Username = username,
         };
+    }
+
+    public byte[] GetChannelBinding(SslStream stream)
+    {
+        // Acquire `SecPkgContext_Bindings` using `QueryContextAttributesExW`.
+        // https://learn.microsoft.com/en-us/windows/win32/api/sspi/nf-sspi-querycontextattributesw
+        using var cbt = this.Gs2BindingFlag switch
+        {
+            // `SECPKG_ATTR_UNIQUE_BINDINGS`
+            "p=tls-unique" => stream.TransportContext.GetChannelBinding(ChannelBindingKind.Unique),
+
+            // `SECPKG_ATTR_ENDPOINT_BINDINGS`
+            "p=tls-server-end-point" => stream.TransportContext.GetChannelBinding(ChannelBindingKind.Endpoint),
+
+            // other
+            _ => null,
+        };
+
+        if (cbt is null)
+        {
+            return Array.Empty<byte>();
+        }
+
+        // cbt is `SecPkgContext_Bindings`.
+        // `SecPkgContext_Bindings.Bindings` has `SEC_CHANNEL_BINDINGS` + binding data.
+        // binding data is start with `tls-unique:` or `tls-server-end-point:`.
+        // https://learn.microsoft.com/en-us/windows/win32/api/sspi/ns-sspi-sec_channel_bindings
+        const int bindHeaderSize = 32;
+        int dataHeaderSize = this.Gs2BindingFlag switch
+        {
+            "p=tls-unique" => "tls-unique:".Length,
+            "p=tls-server-end-point" => "tls-server-end-point:".Length,
+            _ => throw new InvalidProgramException(),
+        };
+
+        // `tls-unique` is 12bytes.
+        // `tls-server-end-point` is 32bytes.
+        var tokens = new byte[cbt.Size - bindHeaderSize - dataHeaderSize];
+        Marshal.Copy(cbt.DangerousGetHandle() + bindHeaderSize + dataHeaderSize, tokens, 0, tokens.Length);
+
+        return tokens;
     }
 
     public string ToBareString()
