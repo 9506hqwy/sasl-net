@@ -45,4 +45,9 @@ internal static class ByteExtension
         var bytes = self.Reverse().ToArray();
         return BitConverter.ToUInt16(bytes, 0);
     }
+
+    internal static IEnumerable<byte> Xor(this IEnumerable<byte> self, IEnumerable<byte> value)
+    {
+        return self.Zip(value, (a, b) => (byte)(a ^ b));
+    }
 }

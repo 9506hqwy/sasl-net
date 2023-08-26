@@ -1,4 +1,4 @@
-﻿namespace Sasl.DigestMd5;
+﻿namespace Sasl;
 
 public class QueryReader
 {
