@@ -2,14 +2,9 @@
 
 using System.Security.Cryptography;
 
-public class Signer
+public class Signer(byte[] key)
 {
-    private readonly HMAC hmac;
-
-    public Signer(byte[] key)
-    {
-        this.hmac = new HMACMD5(key);
-    }
+    private readonly HMAC hmac = new HMACMD5(key);
 
     public byte[] Hash(byte[] msg, uint seqNum)
     {
@@ -18,7 +13,7 @@ public class Signer
         mem.Write(seqNum.ToBigEndian());
         mem.Write(msg);
 
-        mem.Seek(0, SeekOrigin.Begin);
+        _ = mem.Seek(0, SeekOrigin.Begin);
         return this.hmac.ComputeHash(mem);
     }
 }

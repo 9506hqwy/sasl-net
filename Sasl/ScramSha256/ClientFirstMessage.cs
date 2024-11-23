@@ -47,7 +47,7 @@ public class ClientFirstMessage
 
         if (cbt is null)
         {
-            return Array.Empty<byte>();
+            return [];
         }
 
         // cbt is `SecPkgContext_Bindings`.

@@ -7,7 +7,7 @@ internal static class MemoryStreamExtension
 {
     internal static byte[] ComputeMd5(this MemoryStream self)
     {
-        self.Seek(0, SeekOrigin.Begin);
+        _ = self.Seek(0, SeekOrigin.Begin);
 
         using var md5 = MD5.Create();
         return md5.ComputeHash(self.ToArray());

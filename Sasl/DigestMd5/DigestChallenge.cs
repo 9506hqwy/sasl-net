@@ -54,7 +54,7 @@ public class DigestChallenge
                     challenge.Stale = reader.ReadBoolean(out var _);
                     break;
                 default:
-                    challenge.Tokens ??= new Dictionary<string, string>();
+                    challenge.Tokens ??= [];
 
                     // TODO: add `quoted-string` support.
                     challenge.Tokens[key] = reader.ReadText();

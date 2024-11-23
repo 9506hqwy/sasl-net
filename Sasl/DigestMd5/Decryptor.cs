@@ -2,23 +2,15 @@
 
 using System.Security.Cryptography;
 
-public class Decryptor : IDisposable
+public class Decryptor(SymmetricAlgorithm algorithm, Signer signer) : IDisposable
 {
-    private readonly SymmetricAlgorithm algorithm;
+    private readonly SymmetricAlgorithm algorithm = algorithm;
 
-    private readonly Signer signer;
+    private readonly Signer signer = signer;
 
-    private bool disposed;
+    private bool disposed = false;
 
-    private uint seqNum;
-
-    public Decryptor(SymmetricAlgorithm algorithm, Signer signer)
-    {
-        this.algorithm = algorithm;
-        this.signer = signer;
-        this.disposed = false;
-        this.seqNum = 0;
-    }
+    private uint seqNum = 0;
 
     public byte[] Decrypt(byte[] msg)
     {
@@ -29,12 +21,9 @@ public class Decryptor : IDisposable
         }
 
         var seqNum = msg.Skip(msg.Length - 4).Take(4).ToUint();
-        if (seqNum != this.seqNum)
-        {
-            throw new InvalidOperationException($"Invalid sequence number: {seqNum}({this.seqNum})");
-        }
-
-        return this.Plain(msg.Take(msg.Length - 6).ToArray());
+        return seqNum != this.seqNum
+            ? throw new InvalidOperationException($"Invalid sequence number: {seqNum}({this.seqNum})")
+            : this.Plain(msg.Take(msg.Length - 6).ToArray());
     }
 
     public void Dispose()
@@ -65,7 +54,7 @@ public class Decryptor : IDisposable
         using var mem = new MemoryStream();
         mem.Write(msg);
 
-        mem.Seek(0, SeekOrigin.Begin);
+        _ = mem.Seek(0, SeekOrigin.Begin);
         using var cipher = this.algorithm.CreateDecryptor();
         using var cryptor = new CryptoStream(mem, cipher, CryptoStreamMode.Read);
 

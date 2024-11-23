@@ -1,22 +1,17 @@
 ﻿namespace Sasl;
 
-public class QueryReader
+public class QueryReader(string value)
 {
     private const char HT = (char)9;
     private const char LF = (char)10;
     private const char CR = (char)13;
     private const char SP = (char)32;
 
-    private string query;
+    private string query = value;
 
     public QueryReader(byte[] value)
         : this(value.GetString())
     {
-    }
-
-    public QueryReader(string value)
-    {
-        this.query = value;
     }
 
     public bool Any()
@@ -109,25 +104,25 @@ public class QueryReader
     private static bool IsSeparators(char ch)
     {
         return
-            ch == '('
-            || ch == ')'
-            || ch == '<'
-            || ch == '>'
-            || ch == '@'
-            || ch == ','
-            || ch == ';'
-            || ch == ':'
-            || ch == '\\'
-            || ch == '"'
-            || ch == '/'
-            || ch == '['
-            || ch == ']'
-            || ch == '?'
-            || ch == '='
-            || ch == '{'
-            || ch == '}'
-            || ch == SP
-            || ch == HT;
+            ch is '('
+            or ')'
+            or '<'
+            or '>'
+            or '@'
+            or ','
+            or ';'
+            or ':'
+            or '\\'
+            or '"'
+            or '/'
+            or '['
+            or ']'
+            or '?'
+            or '='
+            or '{'
+            or '}'
+            or SP
+            or HT;
     }
 
     private static bool IsValidToken(char ch)

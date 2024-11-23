@@ -6,9 +6,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestCreateFromRc4AuthConf()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "rc4" },
-            new string[] { "auth-conf" });
+        var challenge = CreateChallenge(
+            ["rc4"],
+            ["auth-conf"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         Assert.IsNull(response.AuthzId);
         Assert.AreEqual(challenge.Charset, response.Charset);
@@ -27,9 +27,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestCreateFrom3DesAuthInt()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "3des" },
-            new string[] { "auth-int" });
+        var challenge = CreateChallenge(
+            ["3des"],
+            ["auth-int"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         Assert.IsNull(response.AuthzId);
         Assert.AreEqual(challenge.Charset, response.Charset);
@@ -48,9 +48,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestCreateFromDesAuth()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "des" },
-            new string[] { "auth" });
+        var challenge = CreateChallenge(
+            ["des"],
+            ["auth"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         Assert.IsNull(response.AuthzId);
         Assert.AreEqual(challenge.Charset, response.Charset);
@@ -69,9 +69,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestCreateFromRc456None()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "rc4-56" },
-            new string[0]);
+        var challenge = CreateChallenge(
+            ["rc4-56"],
+            []);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         Assert.IsNull(response.AuthzId);
         Assert.AreEqual(challenge.Charset, response.Charset);
@@ -90,9 +90,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestCreateFromRc440None()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "rc4-40" },
-            new string[0]);
+        var challenge = CreateChallenge(
+            ["rc4-40"],
+            []);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         Assert.IsNull(response.AuthzId);
         Assert.AreEqual(challenge.Charset, response.Charset);
@@ -111,9 +111,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestCreateFromNoneNone()
     {
-        var challenge = this.CreateChallenge(
-            new string[0],
-            new string[0]);
+        var challenge = CreateChallenge(
+            [],
+            []);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         Assert.IsNull(response.AuthzId);
         Assert.AreEqual(challenge.Charset, response.Charset);
@@ -133,28 +133,28 @@ public class DigestResponseTest
     [ExpectedException(typeof(NotSupportedException))]
     public void TestCreateFromNoneUnknown()
     {
-        var challenge = this.CreateChallenge(
-            new string[0],
-            new string[] { "unknown" });
-        DigestResponse.CreateFrom(challenge, "digest-uri");
+        var challenge = CreateChallenge(
+            [],
+            ["unknown"]);
+        _ = DigestResponse.CreateFrom(challenge, "digest-uri");
     }
 
     [TestMethod]
     [ExpectedException(typeof(NotSupportedException))]
     public void TestCreateFromUnknownNone()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "unknown" },
-            new string[0]);
-        DigestResponse.CreateFrom(challenge, "digest-uri");
+        var challenge = CreateChallenge(
+            ["unknown"],
+            []);
+        _ = DigestResponse.CreateFrom(challenge, "digest-uri");
     }
 
     [TestMethod]
     public void TestGetClientSealingKey()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "rc4" },
-            new string[] { "auth-conf" });
+        var challenge = CreateChallenge(
+            ["rc4"],
+            ["auth-conf"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         response.SetResponse("username", "password");
         var key = response.GetClientSealingKey("password");
@@ -164,9 +164,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestGetClientSigningKey()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "rc4" },
-            new string[] { "auth-conf" });
+        var challenge = CreateChallenge(
+            ["rc4"],
+            ["auth-conf"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         response.SetResponse("username", "password");
         var key = response.GetClientSigningKey("password");
@@ -176,9 +176,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestGetServerSealingKey()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "rc4" },
-            new string[] { "auth-conf" });
+        var challenge = CreateChallenge(
+            ["rc4"],
+            ["auth-conf"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         response.SetResponse("username", "password");
         var key = response.GetServerSealingKey("password");
@@ -188,9 +188,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestGetServerSigningKey()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "rc4" },
-            new string[] { "auth-conf" });
+        var challenge = CreateChallenge(
+            ["rc4"],
+            ["auth-conf"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         response.SetResponse("username", "password");
         var key = response.GetServerSigningKey("password");
@@ -200,9 +200,9 @@ public class DigestResponseTest
     [TestMethod]
     public void TestSetResponse()
     {
-        var challenge = this.CreateChallenge(
-            new string[] { "rc4" },
-            new string[] { "auth-conf" });
+        var challenge = CreateChallenge(
+            ["rc4"],
+            ["auth-conf"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         response.SetResponse("username", "password");
         Assert.AreEqual("username", response.Username);
@@ -344,9 +344,9 @@ public class DigestResponseTest
     public void TestClientEncryptServerDescript()
     {
         const string password = "password";
-        var challenge = this.CreateChallenge(
-            new string[] { "3des" },
-            new string[] { "auth-conf" });
+        var challenge = CreateChallenge(
+            ["3des"],
+            ["auth-conf"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         response.SetResponse("username", password);
         var enc = response.CreateEncryptor(Mode.Client, password);
@@ -364,9 +364,9 @@ public class DigestResponseTest
     public void TestServerEncryptClientDescript()
     {
         const string password = "password";
-        var challenge = this.CreateChallenge(
-            new string[] { "3des" },
-            new string[] { "auth-conf" });
+        var challenge = CreateChallenge(
+            ["3des"],
+            ["auth-conf"]);
         var response = DigestResponse.CreateFrom(challenge, "digest-uri");
         response.SetResponse("username", password);
         var enc = response.CreateEncryptor(Mode.Server, password);
@@ -380,7 +380,7 @@ public class DigestResponseTest
         CollectionAssert.AreEqual(plain, plain2);
     }
 
-    private DigestChallenge CreateChallenge(string[] cipher, string[] qop)
+    private static DigestChallenge CreateChallenge(string[] cipher, string[] qop)
     {
         return new DigestChallenge
         {

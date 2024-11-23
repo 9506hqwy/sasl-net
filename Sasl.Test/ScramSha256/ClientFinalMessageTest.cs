@@ -9,7 +9,7 @@ public class ClientFinalMessageTest
         var cfirst = new ClientFirstMessage();
         var sfirst = new ServerFirstMessage
         {
-            SaltRaw = new byte[] { 0x00, 0x01, 0x02, 0x03 },
+            SaltRaw = [0x00, 0x01, 0x02, 0x03],
             IterationCount = 2,
         };
         var final = new ClientFinalMessage();

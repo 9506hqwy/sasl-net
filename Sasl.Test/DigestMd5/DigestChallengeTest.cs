@@ -3,6 +3,14 @@
 [TestClass]
 public class DigestChallengeTest
 {
+    private static readonly string[] Cipher3des = ["3des"];
+
+    private static readonly string[] Cipher3desRc4 = ["3des", "rc4"];
+
+    private static readonly string[] QopAuth = ["auth"];
+
+    private static readonly string[] QopAuthInit = ["auth", "auth-int"];
+
     [TestMethod]
     public void TestParseAlgorithm()
     {
@@ -54,7 +62,7 @@ public class DigestChallengeTest
         var challenge = DigestChallenge.Parse(new QueryReader("cipher=\"3des\""));
         Assert.IsNull(challenge.Algorithm);
         Assert.IsNull(challenge.Charset);
-        CollectionAssert.AreEqual(new string[] { "3des" }, challenge.Cipher);
+        CollectionAssert.AreEqual(Cipher3des, challenge.Cipher);
         Assert.IsNull(challenge.MaxBuf);
         Assert.IsNull(challenge.Nonce);
         Assert.IsNull(challenge.Qop);
@@ -69,7 +77,7 @@ public class DigestChallengeTest
         var challenge = DigestChallenge.Parse(new QueryReader("cipher=\"3des,rc4\""));
         Assert.IsNull(challenge.Algorithm);
         Assert.IsNull(challenge.Charset);
-        CollectionAssert.AreEqual(new string[] { "3des", "rc4" }, challenge.Cipher);
+        CollectionAssert.AreEqual(Cipher3desRc4, challenge.Cipher);
         Assert.IsNull(challenge.MaxBuf);
         Assert.IsNull(challenge.Nonce);
         Assert.IsNull(challenge.Qop);
@@ -132,7 +140,7 @@ public class DigestChallengeTest
         Assert.IsNull(challenge.Cipher);
         Assert.IsNull(challenge.MaxBuf);
         Assert.IsNull(challenge.Nonce);
-        CollectionAssert.AreEqual(new string[] { "auth" }, challenge.Qop);
+        CollectionAssert.AreEqual(QopAuth, challenge.Qop);
         Assert.IsNull(challenge.Realm);
         Assert.IsFalse(challenge.Stale);
         Assert.IsNull(challenge.Tokens);
@@ -147,7 +155,7 @@ public class DigestChallengeTest
         Assert.IsNull(challenge.Cipher);
         Assert.IsNull(challenge.MaxBuf);
         Assert.IsNull(challenge.Nonce);
-        CollectionAssert.AreEqual(new string[] { "auth", "auth-int" }, challenge.Qop);
+        CollectionAssert.AreEqual(QopAuthInit, challenge.Qop);
         Assert.IsNull(challenge.Realm);
         Assert.IsFalse(challenge.Stale);
         Assert.IsNull(challenge.Tokens);

@@ -11,15 +11,11 @@ public class ResponseAuth
         while (reader.Any())
         {
             var key = reader.ReadKey();
-            switch (key.ToLowerInvariant())
+            auth.RspAuth = key.ToLowerInvariant() switch
             {
-                case "rspauth":
-                    auth.RspAuth = reader.ReadText();
-                    break;
-                default:
-                    throw new NotSupportedException($"Not suppoted query key: {key}");
-            }
-
+                "rspauth" => reader.ReadText(),
+                _ => throw new NotSupportedException($"Not suppoted query key: {key}"),
+            };
             reader.NextKey();
         }
 

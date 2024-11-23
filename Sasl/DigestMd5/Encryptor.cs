@@ -2,23 +2,15 @@
 
 using System.Security.Cryptography;
 
-public class Encryptor : IDisposable
+public class Encryptor(SymmetricAlgorithm algorithm, Signer signer) : IDisposable
 {
-    private readonly SymmetricAlgorithm algorithm;
+    private readonly SymmetricAlgorithm algorithm = algorithm;
 
-    private readonly Signer signer;
+    private readonly Signer signer = signer;
 
-    private bool disposed;
+    private bool disposed = false;
 
-    private uint seqNum;
-
-    public Encryptor(SymmetricAlgorithm algorithm, Signer signer)
-    {
-        this.algorithm = algorithm;
-        this.signer = signer;
-        this.disposed = false;
-        this.seqNum = 0;
-    }
+    private uint seqNum = 0;
 
     public void Dispose()
     {
@@ -36,7 +28,7 @@ public class Encryptor : IDisposable
 
         this.seqNum += 1;
 
-        mem.Seek(0, SeekOrigin.Begin);
+        _ = mem.Seek(0, SeekOrigin.Begin);
         return mem.ToArray();
     }
 
@@ -70,7 +62,7 @@ public class Encryptor : IDisposable
         cryptor.Write(this.signer.Hash(msg, this.seqNum), 0, MacSize);
         cryptor.Flush();
 
-        mem.Seek(0, SeekOrigin.Begin);
+        _ = mem.Seek(0, SeekOrigin.Begin);
         return mem.ToArray();
     }
 

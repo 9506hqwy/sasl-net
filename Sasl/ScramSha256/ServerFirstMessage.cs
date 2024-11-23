@@ -40,7 +40,7 @@ public class ServerFirstMessage
                     message.Salt = reader.ReadText();
                     break;
                 default:
-                    message.Extensions ??= new Dictionary<string, string>();
+                    message.Extensions ??= [];
                     message.Extensions[key] = reader.ReadText();
                     break;
             }

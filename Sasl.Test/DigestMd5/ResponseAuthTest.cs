@@ -14,6 +14,6 @@ public class ResponseAuthTest
     [ExpectedException(typeof(NotSupportedException))]
     public void TestParseUnknown()
     {
-        ResponseAuth.Parse(new QueryReader("unknown=abc"));
+        _ = ResponseAuth.Parse(new QueryReader("unknown=abc"));
     }
 }

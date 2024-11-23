@@ -1,5 +1,4 @@
 {
-    "coverage-gutters.showLineCoverage": true,
     "dotnet.defaultSolution": "sasl-net.sln",
     "editor.codeLens": false
 }

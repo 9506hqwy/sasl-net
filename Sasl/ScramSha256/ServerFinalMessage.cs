@@ -30,7 +30,7 @@ public class ServerFinalMessage
                     message.Verifier = reader.ReadText();
                     break;
                 default:
-                    message.Extensions ??= new Dictionary<string, string>();
+                    message.Extensions ??= [];
                     message.Extensions[key] = reader.ReadText();
                     break;
             }

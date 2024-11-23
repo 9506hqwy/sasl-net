@@ -31,21 +31,15 @@ public class DigestResponse
 
     public string? Username { get; set; }
 
-    internal int SealingHashSize
+    internal int SealingHashSize => this.Cipher switch
     {
-        get
-        {
-            return this.Cipher switch
-            {
-                CipherRc440 => 5,
-                CipherRc456 => 7,
-                CipherRc4 => 16,
-                CipherDes => 16,
-                Cipher3Des => 16,
-                _ => throw new NotSupportedException($"Not supported cipher: {this.Cipher}"),
-            };
-        }
-    }
+        CipherRc440 => 5,
+        CipherRc456 => 7,
+        CipherRc4 => 16,
+        CipherDes => 16,
+        Cipher3Des => 16,
+        _ => throw new NotSupportedException($"Not supported cipher: {this.Cipher}"),
+    };
 
     public static DigestResponse CreateFrom(DigestChallenge challenge, string digestUri)
     {
@@ -271,7 +265,7 @@ public class DigestResponse
             output[i] = DigestResponse.AddOddParity(value);
 
             // Next 7bit.
-            input = input >> 7;
+            input >>= 7;
         }
 
         return output;
@@ -338,7 +332,7 @@ public class DigestResponse
 
         mem.Write(":");
         mem.Write(this.DigestUri);
-        if (this.Qop == QopAuthInt || this.Qop == QopAuthConf)
+        if (this.Qop is QopAuthInt or QopAuthConf)
         {
             mem.Write(":");
             mem.Write(EmptyHash);
@@ -392,7 +386,7 @@ public class DigestResponse
         var des = TripleDES.Create();
         des.Mode = CipherMode.CBC;
         des.Padding = PaddingMode.None;
-        des.Key = key1.Concat(key2).Concat(key1).ToArray();
+        des.Key = [.. key1, .. key2, .. key1];
         des.IV = key.Skip(8).ToArray();
 
         return des;
