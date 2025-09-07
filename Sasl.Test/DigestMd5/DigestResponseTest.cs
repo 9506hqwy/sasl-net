@@ -130,23 +130,23 @@ public class DigestResponseTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(NotSupportedException))]
     public void TestCreateFromNoneUnknown()
     {
         var challenge = CreateChallenge(
             [],
             ["unknown"]);
-        _ = DigestResponse.CreateFrom(challenge, "digest-uri");
+        var exc = Assert.ThrowsExactly<NotSupportedException>(() => DigestResponse.CreateFrom(challenge, "digest-uri"));
+        Assert.IsNotNull(exc);
     }
 
     [TestMethod]
-    [ExpectedException(typeof(NotSupportedException))]
     public void TestCreateFromUnknownNone()
     {
         var challenge = CreateChallenge(
             ["unknown"],
             []);
-        _ = DigestResponse.CreateFrom(challenge, "digest-uri");
+        var exc = Assert.ThrowsExactly<NotSupportedException>(() => DigestResponse.CreateFrom(challenge, "digest-uri"));
+        Assert.IsNotNull(exc);
     }
 
     [TestMethod]

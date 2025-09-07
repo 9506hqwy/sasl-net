@@ -11,9 +11,9 @@ public class ResponseAuthTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(NotSupportedException))]
     public void TestParseUnknown()
     {
-        _ = ResponseAuth.Parse(new QueryReader("unknown=abc"));
+        var exc = Assert.ThrowsExactly<NotSupportedException>(() => _ = ResponseAuth.Parse(new QueryReader("unknown=abc")));
+        Assert.IsNotNull(exc);
     }
 }

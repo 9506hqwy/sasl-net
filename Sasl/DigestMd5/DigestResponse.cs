@@ -1,7 +1,7 @@
-﻿namespace Sasl.DigestMd5;
+﻿using System.Security.Cryptography;
+using static Sasl.DigestMd5.Constants;
 
-using System.Security.Cryptography;
-using static Constants;
+namespace Sasl.DigestMd5;
 
 public class DigestResponse
 {
@@ -56,11 +56,11 @@ public class DigestResponse
 
         if (challenge.Cipher is not null && challenge.Cipher.Any(c => c != string.Empty))
         {
-            if (!DigestResponse.SetCipher(response, challenge, CipherRc4)
-                && !DigestResponse.SetCipher(response, challenge, Cipher3Des)
-                && !DigestResponse.SetCipher(response, challenge, CipherDes)
-                && !DigestResponse.SetCipher(response, challenge, CipherRc456)
-                && !DigestResponse.SetCipher(response, challenge, CipherRc440))
+            if (!SetCipher(response, challenge, CipherRc4)
+                && !SetCipher(response, challenge, Cipher3Des)
+                && !SetCipher(response, challenge, CipherDes)
+                && !SetCipher(response, challenge, CipherRc456)
+                && !SetCipher(response, challenge, CipherRc440))
             {
                 var ciphers = string.Join(",", challenge.Cipher);
                 throw new NotSupportedException($"Not supported ciphers: {ciphers}");
@@ -69,9 +69,9 @@ public class DigestResponse
 
         if (challenge.Qop is not null && challenge.Qop.Any(q => q != string.Empty))
         {
-            if (!DigestResponse.SetQop(response, challenge, QopAuthConf)
-                && !DigestResponse.SetQop(response, challenge, QopAuthInt)
-                && !DigestResponse.SetQop(response, challenge, QopAuth))
+            if (!SetQop(response, challenge, QopAuthConf)
+                && !SetQop(response, challenge, QopAuthInt)
+                && !SetQop(response, challenge, QopAuth))
             {
                 var qops = string.Join(",", challenge.Qop);
                 throw new NotSupportedException($"Not supported qop: {qops}");
@@ -262,7 +262,7 @@ public class DigestResponse
         for (var i = 7; i >= 0; i--)
         {
             var value = (byte)((input & 0xFF) << 1);
-            output[i] = DigestResponse.AddOddParity(value);
+            output[i] = AddOddParity(value);
 
             // Next 7bit.
             input >>= 7;
@@ -297,7 +297,7 @@ public class DigestResponse
     {
         using var mem = new MemoryStream();
 
-        mem.Write(this.ComputeHA1(password).Take(size).ToArray());
+        mem.Write([.. this.ComputeHA1(password).Take(size)]);
         mem.Write(magic);
 
         return mem.ComputeMd5();
@@ -380,14 +380,14 @@ public class DigestResponse
 
     private SymmetricAlgorithm CreateAlgorithm(byte[] key)
     {
-        var key1 = DigestResponse.CreateSubKey(key.Take(7).ToArray());
-        var key2 = DigestResponse.CreateSubKey(key.Skip(7).Take(7).ToArray());
+        var key1 = CreateSubKey([.. key.Take(7)]);
+        var key2 = CreateSubKey([.. key.Skip(7).Take(7)]);
 
         var des = TripleDES.Create();
         des.Mode = CipherMode.CBC;
         des.Padding = PaddingMode.None;
         des.Key = [.. key1, .. key2, .. key1];
-        des.IV = key.Skip(8).ToArray();
+        des.IV = [.. key.Skip(8)];
 
         return des;
     }

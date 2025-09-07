@@ -1,6 +1,6 @@
-﻿namespace Sasl.DigestMd5;
+﻿using System.Security.Cryptography;
 
-using System.Security.Cryptography;
+namespace Sasl.DigestMd5;
 
 public class Encryptor(SymmetricAlgorithm algorithm, Signer signer) : IDisposable
 {
@@ -72,6 +72,6 @@ public class Encryptor(SymmetricAlgorithm algorithm, Signer signer) : IDisposabl
 
         var paddingSize = blockSize - ((msg.Length + macSize) % blockSize);
         var paddingByte = BitConverter.GetBytes(paddingSize).First();
-        return Enumerable.Repeat(paddingByte, paddingSize).ToArray();
+        return [.. Enumerable.Repeat(paddingByte, paddingSize)];
     }
 }

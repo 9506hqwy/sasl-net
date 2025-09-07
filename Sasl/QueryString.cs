@@ -41,7 +41,7 @@ public class QueryReader(string value)
         // [LWS]key[LWS]=rest
         var end = this.query.IndexOf('=');
         var key = this.query.Substring(0, end).Trim(HT, LF, CR, SP);
-        QueryReader.CheckValidToken(key);
+        CheckValidToken(key);
         this.query = this.query.Substring(end + 1); // +1 (equal)
         return key;
     }
@@ -50,7 +50,7 @@ public class QueryReader(string value)
     {
         // "list",rest
         var list = this.ReadQText();
-        return list.Split(',').Select(v => v.Trim(HT, LF, CR, SP)).ToArray();
+        return [.. list.Split(',').Select(v => v.Trim(HT, LF, CR, SP))];
     }
 
     public string ReadQText()
@@ -90,7 +90,7 @@ public class QueryReader(string value)
 
     private static void CheckValidToken(string key)
     {
-        if (!key.ToCharArray().All(QueryReader.IsValidToken))
+        if (!key.ToCharArray().All(IsValidToken))
         {
             throw new NotSupportedException($"Not suppoted query key: {key}");
         }
@@ -129,7 +129,7 @@ public class QueryReader(string value)
     {
         return
             ch < 128
-            && !QueryReader.IsCtrlSeq(ch)
-            && !QueryReader.IsSeparators(ch);
+            && !IsCtrlSeq(ch)
+            && !IsSeparators(ch);
     }
 }

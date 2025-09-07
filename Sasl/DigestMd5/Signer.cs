@@ -1,6 +1,6 @@
-﻿namespace Sasl.DigestMd5;
+﻿using System.Security.Cryptography;
 
-using System.Security.Cryptography;
+namespace Sasl.DigestMd5;
 
 public class Signer(byte[] key)
 {

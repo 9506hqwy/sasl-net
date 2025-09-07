@@ -1,6 +1,6 @@
-﻿namespace Sasl.DigestMd5;
+﻿using System.Security.Cryptography;
 
-using System.Security.Cryptography;
+namespace Sasl.DigestMd5;
 
 public class Decryptor(SymmetricAlgorithm algorithm, Signer signer) : IDisposable
 {
@@ -23,7 +23,7 @@ public class Decryptor(SymmetricAlgorithm algorithm, Signer signer) : IDisposabl
         var seqNum = msg.Skip(msg.Length - 4).Take(4).ToUint();
         return seqNum != this.seqNum
             ? throw new InvalidOperationException($"Invalid sequence number: {seqNum}({this.seqNum})")
-            : this.Plain(msg.Take(msg.Length - 6).ToArray());
+            : this.Plain([.. msg.Take(msg.Length - 6)]);
     }
 
     public void Dispose()
@@ -60,7 +60,7 @@ public class Decryptor(SymmetricAlgorithm algorithm, Signer signer) : IDisposabl
 
         var plain = new byte[msg.Length];
         var plainSize = cryptor.Read(plain, 0, plain.Length);
-        plain = plain.Take(plainSize).ToArray();
+        plain = [.. plain.Take(plainSize)];
 
         var paddingSize = (int)plain[plain.Length - (MacSize + 1)];
 

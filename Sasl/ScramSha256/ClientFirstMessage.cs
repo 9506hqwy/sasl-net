@@ -1,8 +1,8 @@
-﻿namespace Sasl.ScramSha256;
-
-using System.Net.Security;
+﻿using System.Net.Security;
 using System.Runtime.InteropServices;
 using System.Security.Authentication.ExtendedProtection;
+
+namespace Sasl.ScramSha256;
 
 public class ClientFirstMessage
 {

@@ -1,6 +1,6 @@
-﻿namespace Sasl.ScramSha256;
+﻿using System.Security.Cryptography;
 
-using System.Security.Cryptography;
+namespace Sasl.ScramSha256;
 
 public class ClientFinalMessage
 {
@@ -139,7 +139,7 @@ public class ClientFinalMessage
         for (var i = 1; i < count; i++)
         {
             input = h.ComputeHash(input);
-            output = output.Xor(input).ToArray();
+            output = [.. output.Xor(input)];
         }
 
         return output;

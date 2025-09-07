@@ -1,7 +1,7 @@
-﻿namespace Sasl;
-
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+
+namespace Sasl;
 
 internal static class MemoryStreamExtension
 {

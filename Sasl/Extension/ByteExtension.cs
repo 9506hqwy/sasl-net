@@ -1,6 +1,6 @@
-﻿namespace Sasl;
+﻿using System.Text;
 
-using System.Text;
+namespace Sasl;
 
 internal static class ByteExtension
 {
