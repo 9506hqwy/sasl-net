@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Sasl.Test/Sasl.Test.csproj" />
+  <Project Path="Sasl/Sasl.csproj" />
+</Solution>

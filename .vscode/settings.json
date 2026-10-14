@@ -1,5 +1,5 @@
 {
-    "dotnet.defaultSolution": "sasl-net.sln",
+    "dotnet.defaultSolution": "sasl-net.slnx",
     "editor.codeLens": false,
     "editor.formatOnPaste": false,
     "editor.formatOnSave": true,
